@@ -22,8 +22,36 @@ Various adaptions of this algorithm were created in the _clustering_culm.py_ fil
 
 ### Naive Approach
 
-The naive approach to filtering utilizes the aforementioned clustering algorithm. Visualizations of true and false positive atoms showed that false positives can be found in small clusters. Data from simulations that indicated which atoms were predicted to be a part of the PPI when the protein was exposed to different values of a potential was used to determine the indices of true and false positives, using the _false_positives_ and _true_positives_ methods. For each value of potential, the method _clustering_info_pred_interface_atoms_ was called, which internally calls _cluster_pred_interface_atoms_. This method clusters atoms that are predicted to be a part of the PPI at a specified potential value. 
+The naive approach to filtering utilizes the aforementioned clustering algorithm. Visualizations of true and false positive atoms showed that false positives can be found in small clusters; thus, by determining the location of atoms in small clusters (sizes 1, 2 and 3), these atoms can be filtered out of the predictions of the PPI to improve the accuracy of PPI prediction. 
 
+Data from simulations that indicated which atoms were predicted to be a part of the PPI when the protein was exposed to different values of a potential was used to determine the indices of true and false positives, using the _false_positives_ and _true_positives_ methods. For each value of potential, the method _clustering_info_pred_interface_atoms_ was called, which internally calls _cluster_pred_interface_atoms_. This method clusters atoms that are predicted to be a part of the PPI at a specified potential value. By iterating through the clusters found, the atoms that are a part of clusters of sizes 1, 2 or 3 were found. 
 
+Next, at each potential value where a prediction was made, intersections between the atoms considered as true and false positives and the atoms that were to be filtered out were removed, and the "new" true and false positives were stored in _FP_dict_filter_ and _TP_dict_filter_. 
 
+```
+FP_dict_filter = {}
+TP_dict_filter = {}
+
+for i in range(0, 404, 4):
+	print(i)
+	num_clusters, cluster_dict, singleton_ind, doubles_ind, triples_ind = clustering_info_pred_interface_atoms(i)
+	if len(singleton_ind) == 0:
+		FP_dict_filter[i] = FP_dict[i]
+		TP_dict_filter[i] = TP_dict[i]
+	else:
+		# for singleton clusters
+		new_ind_FP = list(set(FP_dict[i]) - set(singleton_ind))
+		new_ind_TP = list(set(TP_dict[i]) - set(singleton_ind))
+
+		# for clusters with two atoms 
+		new_ind_FP = list(set(new_ind_FP) - set(doubles_ind))
+		new_ind_TP = list(set(new_ind_TP) - set(doubles_ind))
+
+		# for clusters with three atoms
+		new_ind_FP = list(set(new_ind_FP) - set(triples_ind))
+		new_ind_TP = list(set(new_ind_TP) - set(triples_ind))
+
+		FP_dict_filter[i] = new_ind_FP
+		TP_dict_filter[i] = new_ind_TP
+```
 
