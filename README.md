@@ -14,7 +14,7 @@ inds = np.digitize(phi_star, phi_star_bins)
 ```
 The function _cluster_atoms_ takes in an _int_ representing the bin to cluster. Using Scipy, a _KDTree_ was creating using the positions of the atoms in the specified bin, and the _query()_ method was called to get the nearest neighbors of each atom. The nearest neighbors of each atom were traversed, and intersections between nearest neighbors of atoms were found to determine clusters. Result of clustering shown below (different colors represent different bins).
 
-![Alt text](Users/matthew/Desktop/Summer Research 2019/vmdscene.tga?raw=true "Title")
+![vmdscene](https://user-images.githubusercontent.com/43687112/63385802-acd5f500-c36f-11e9-92dd-902b64736258.jpg)
 
 Various adaptions of this algorithm were created in the _clustering_culm.py_ file. The _cluster_atoms_under_ and _cluster_atoms_over_ methods cluster atoms under and over a specified bin number respectively. The _clustering_info_under_ and _clustering_info_over_ methods provide information regarding the number of clusters, distribution of cluster sizes, as well as the indices of atoms that are a part of clusters of size 1, 2, or 3; this information would be used in the naive filtering approach. 
 
