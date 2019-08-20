@@ -12,7 +12,9 @@ Clustering algorithm was created in _clustering.py_ file. The algorithm first bi
 phi_star_bins = np.linspace(0, max(phi_star), num=50)
 inds = np.digitize(phi_star, phi_star_bins)
 ```
-The function _cluster_atoms_ takes in an _int_ representing the bin to cluster. Using Scipy, a _KDTree_ was creating using the positions of the atoms in the specified bin, and the _query()_ method was called to get the nearest neighbors of each atom. The nearest neighbors of each atom were traversed, and intersections between nearest neighbors of atoms were found to determine clusters. 
+The function _cluster_atoms_ takes in an _int_ representing the bin to cluster. Using Scipy, a _KDTree_ was creating using the positions of the atoms in the specified bin, and the _query()_ method was called to get the nearest neighbors of each atom. The nearest neighbors of each atom were traversed, and intersections between nearest neighbors of atoms were found to determine clusters. Result of clustering shown below (different colors represent different bins).
+
+![Alt text](/Users/matthew/Desktop/Summer Research 2019/vmdscene.tga?raw=true "Title")
 
 Various adaptions of this algorithm were created in the _clustering_culm.py_ file. The _cluster_atoms_under_ and _cluster_atoms_over_ methods cluster atoms under and over a specified bin number respectively. The _clustering_info_under_ and _clustering_info_over_ methods provide information regarding the number of clusters, distribution of cluster sizes, as well as the indices of atoms that are a part of clusters of size 1, 2, or 3; this information would be used in the naive filtering approach. 
 
@@ -20,7 +22,7 @@ Various adaptions of this algorithm were created in the _clustering_culm.py_ fil
 
 ### Naive Approach
 
-
+The naive approach to filtering utilizes the aforementioned clustering algorithm. Visualizations of true and false positive atoms showed that false positives can be found in small clusters. Data from simulations that indicated which atoms were predicted to be a part of the PPI when the protein was exposed to different values of a potential was used to determine the indices of true and false positives, using the _false_positives_ and _true_positives_ methods. For each value of potential, the method _clustering_info_pred_interface_atoms_ was called, which internally calls _cluster_pred_interface_atoms_. This method clusters atoms that are predicted to be a part of the PPI at a specified potential value. 
 
 
 
