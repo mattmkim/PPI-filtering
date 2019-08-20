@@ -9,7 +9,7 @@ Clustering algorithm was created in _clustering.py_ file. The algorithm first bi
 ```
 # num indicates number of bins to create
 
-phi_star_bins = np.linspace(0, max(phi_star), num=101)
+phi_star_bins = np.linspace(0, max(phi_star), num=50)
 inds = np.digitize(phi_star, phi_star_bins)
 ```
 The function _cluster_atoms_ takes in an _int_ representing the bin to cluster. Using Scipy, a _KDTree_ was creating using the positions of the atoms in the specified bin, and the _query()_ method was called to get the nearest neighbors of each atom. The nearest neighbors of each atom were traversed, and intersections between nearest neighbors of atoms were found to determine clusters. 
