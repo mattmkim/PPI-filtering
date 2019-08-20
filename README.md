@@ -55,3 +55,7 @@ for i in range(0, 404, 4):
 		TP_dict_filter[i] = new_ind_TP
 ```
 To measure the performance of this filter, a pre-filter and post-filter ROC curve was plotted.
+
+![ROC](https://user-images.githubusercontent.com/43687112/63386764-d1cb6780-c371-11e9-97ea-150a6a39283b.png)
+
+
