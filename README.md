@@ -54,4 +54,4 @@ for i in range(0, 404, 4):
 		FP_dict_filter[i] = new_ind_FP
 		TP_dict_filter[i] = new_ind_TP
 ```
-
+To measure the performance of this filter, a pre-filter and post-filter ROC curve was plotted.
