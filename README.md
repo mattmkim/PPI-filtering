@@ -54,8 +54,9 @@ for i in range(0, 404, 4):
 		FP_dict_filter[i] = new_ind_FP
 		TP_dict_filter[i] = new_ind_TP
 ```
-To measure the performance of this filter, a pre-filter and post-filter ROC curve was plotted.
+To measure the performance of this filter, a pre-filter and post-filter ROC curve was plotted, and the area under the curve was recorded.
 
 ![ROC](https://user-images.githubusercontent.com/43687112/63386764-d1cb6780-c371-11e9-97ea-150a6a39283b.png)
 
+The filter was able to only slightly improve the accuracy of the prediction, which was expected. At low values of potential, the occurences of false positives were few and found in small clusters; however, as the potential grew, both the number and cluster size of false positives grew as well, and the filter was unable to account for large clusters of false positives. 
 
