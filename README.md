@@ -97,17 +97,21 @@ Finding the number of nearest neighbors for each atom was straightforward. All a
 ```
 # list to contain the number of nearest neighbors for each atom 
 nn_list = []
+
 # positions is a list of 3-tuples representing each atoms coordinates
 for i in range(0, len(positions)):
 	for j in range(0, len(final_clusters)):
+	
 		# atoms in final_clusters are represented as integers, in the same order as they appear in positions
 		if i in final_clusters[j]:
 			nn_list.append(len(final_clusters[j]))
 			break
 			
+# dataframe contains data for each atom at each potential value; since number of nearest neighbors doesn't depend on potential value, simply can extend the list by 51 times. 	
 nn_list = nn_list * 51
 
 return nn_list
 ```
+Determining 
 
 
