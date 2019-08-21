@@ -60,7 +60,14 @@ To measure the performance of this filter, a pre-filter and post-filter ROC curv
 
 The filter was able to only slightly improve the accuracy of the prediction, which was expected. At low values of potential, the occurences of false positives were few and found in small clusters; however, as the potential grew, both the number and cluster size of false positives grew as well, and the filter was unable to account for large clusters of false positives. Further, true positives were also being filtered out, and due to the relatively low count of true positives, this had a significant effect on the area under the ROC curve.
 
-The next approach taken was to determine if there was a set of atoms that could be filtered out at _every_ potential value. The rationale behind this was that this would limit the number of true positives being filtered out. In this approach, at each potential value, clusters of size 1, 2, and 3 among the atoms that were predicted to be a part of the PPI were found; next, those atoms were filtered out of the PPI prediction for every potential value, and an ROC curve was plotted. The "best" set of atoms yielded the largest area under the curve. 
+The next approach taken was to determine if there was a set of atoms that could be filtered out at _every_ potential value. The rationale behind this was that this would limit the number of true positives being filtered out. In this approach, at each potential value, clusters of size 1, 2, and 3 among the atoms that were predicted to be a part of the PPI were found; next, those atoms were filtered out of the PPI prediction for every potential value, and an ROC curve was plotted. The "best" set of atoms yielded the largest area under the curve. A plot for the area under the curve versus potential value is shown below. 
+
+![ROC_AREA](https://user-images.githubusercontent.com/43687112/63461565-e584d580-c426-11e9-8085-a96eca3717b4.png)
+
+The optimal set of atoms was found from clusters of size 1, 2, or 3 at a potential value of 0.96. This set of atoms was filtered out from predictions at all other potential values, and a ROC curve was constructed.
+
+
+
 
 
 
