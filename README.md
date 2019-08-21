@@ -58,7 +58,9 @@ To measure the performance of this filter, a pre-filter and post-filter ROC curv
 
 ![ROC](https://user-images.githubusercontent.com/43687112/63386764-d1cb6780-c371-11e9-97ea-150a6a39283b.png)
 
-The filter was able to only slightly improve the accuracy of the prediction, which was expected. At low values of potential, the occurences of false positives were few and found in small clusters; however, as the potential grew, both the number and cluster size of false positives grew as well, and the filter was unable to account for large clusters of false positives. 
+The filter was able to only slightly improve the accuracy of the prediction, which was expected. At low values of potential, the occurences of false positives were few and found in small clusters; however, as the potential grew, both the number and cluster size of false positives grew as well, and the filter was unable to account for large clusters of false positives. Further, true positives were also being filtered out, and due to the relatively low count of true positives, this had a significant effect on the area under the ROC curve.
+
+The next approach taken was to determine if there was a set of atoms that could be filtered out at _every_ potential value. The rationale behind this was that this would limit the number of true positives being filtered out. In this approach, at each potential value, clusters of size 1, 2, and 3 among the atoms that were predicted to be a part of the PPI were found; next, those atoms were filtered out of the PPI prediction for every potential value, and an ROC curve was plotted. The "best" set of atoms yielded the largest area under the curve. 
 
 
 
