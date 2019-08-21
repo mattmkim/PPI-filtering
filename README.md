@@ -66,8 +66,13 @@ The next approach taken was to determine if there was a set of atoms that could 
 
 The optimal set of atoms was found from clusters of size 1, 2, or 3 at a potential value of 0.96. This set of atoms was filtered out from predictions at all other potential values, and a ROC curve was constructed.
 
+![ROC_key](https://user-images.githubusercontent.com/43687112/63461813-7e1b5580-c427-11e9-8964-3fb54d870ddb.png)
 
+Again, the performance of the filter was not very good. While this approach succeeded in avoiding filtering out true positives, it was only able to filter out 6 false positive atoms. Furthermore, this approach was not consistent; when applied to other proteins, the optimal set of atoms to filter out was no atoms - the filter was filtering out true positive atoms. 
 
+## Machine Learning Approach
+
+The naive approach to the filtering problem had some success, but ultimately could not serve as a comprehensive solution - there were false positive atoms that were in contact with true positive atoms, which the aforementioned filter could not filter out. 
 
 
 
