@@ -16,7 +16,7 @@ The function `cluster_atoms` takes in an integer representing the bin to cluster
 
 ![vmdscene](https://user-images.githubusercontent.com/43687112/63386879-093a1400-c372-11e9-8e45-26810e6ea860.png)
 
-Various adaptions of this algorithm were created in the _clustering_culm.py_ file. The `cluster_atoms_under()` and `cluster_atoms_over()` methods cluster atoms under and over a specified bin number respectively. The `clustering_info_under()` and `clustering_info_over()` methods provide information regarding the number of clusters, distribution of cluster sizes, as well as the indices of atoms that are a part of clusters of size 1, 2, or 3; this information would be used in the naive filtering approach. 
+Various adaptions of this algorithm were created in the _clustering_culm.py_ file. The `cluster_atoms_under()` and `cluster_atoms_over()` functions cluster atoms under and over a specified bin number respectively. The `clustering_info_under()` and `clustering_info_over()` functions provide information regarding the number of clusters, distribution of cluster sizes, as well as the indices of atoms that are a part of clusters of size 1, 2, or 3; this information would be used in the naive filtering approach. 
 
 ## Filtering 
 
@@ -24,7 +24,7 @@ Various adaptions of this algorithm were created in the _clustering_culm.py_ fil
 
 The naive approach to filtering utilizes the aforementioned clustering algorithm. Visualizations of true and false positive atoms showed that false positives can be found in small clusters; thus, by determining the location of atoms in small clusters (sizes 1, 2 and 3), these atoms can be filtered out of the predictions of the PPI to improve the accuracy of PPI prediction. 
 
-Data from simulations that indicated which atoms were predicted to be a part of the PPI when the protein was exposed to different values of a potential was used to determine the indices of true and false positives, using the `false_positives()` and `true_positives()` methods. For each value of potential, the method `clustering_info_pred_interface_atoms()` was called, which internally calls `cluster_pred_interface_atoms()`. This method clusters atoms that are predicted to be a part of the PPI at a specified potential value. By iterating through the clusters found, the atoms that are a part of clusters of sizes 1, 2 or 3 were found. 
+Data from simulations that indicated which atoms were predicted to be a part of the PPI when the protein was exposed to different values of a potential was used to determine the indices of true and false positives, using the `false_positives()` and `true_positives()` functions. For each value of potential, the method `clustering_info_pred_interface_atoms()` was called, which internally calls `cluster_pred_interface_atoms()`. This method clusters atoms that are predicted to be a part of the PPI at a specified potential value. By iterating through the clusters found, the atoms that are a part of clusters of sizes 1, 2 or 3 were found. 
 
 Next, at each potential value where a prediction was made, intersections between the atoms considered as true and false positives and the atoms that were to be filtered out were removed, and the "new" true and false positives were stored in `FP_dict_filter` and `TP_dict_filter`. 
 
@@ -72,11 +72,11 @@ Again, the performance of the filter was not very good. While this approach succ
 
 ## Machine Learning Approach
 
-The naive approach to the filtering problem had some success, but ultimately could not serve as a comprehensive solution - there were false positive atoms that were in contact with true positive atoms, which the aforementioned filter could not filter out. Data for five proteins were processed into a Pandas dataframe and was used to train and test a neural network created using the Pytorch framework. 
+The naive approach to the filtering problem had some success, but ultimately could not serve as a comprehensive solution - there were false positive atoms that were in contact with true positive atoms, which the aforementioned filter could not filter out. Data for five proteins were processed into a Pandas dataframe and was used to train and test a neural network created using the Pytorch framework. Only atoms that were predicted to be a part of the PPI were used so that the model could classify atoms as either a true or false positive. 
 
 ## Features
 
-The feature vector has 62 elements and contains information for each atom in a protein regarding its atom type, residue type, number of nearest neighbors, and number of dewetted nearest neighbors.
+The feature vector has 62 elements and contains information for each atom in a protein regarding its atom type, residue type, the potential value (affects the number of dewetted nearest neighbors), number of nearest neighbors, number of dewetted nearest neighbors, and if it is a true positive or false positive atom.
 
 ### Atom and Residue Type
 
@@ -86,6 +86,21 @@ Each atom in a protein was labeled with an atom and residue type. Since these ar
 # encode nominal variables
 df = pd.get_dummies(df, columns=['atom_name'], prefix=['atom_name'])
 df = pd.get_dummies(df, columns=['residue_name'], prefix=['residue_name'])
+```
+
+### Number of Nearest Neighbors and Dewetted Nearest Neighbors
+
+Since data for five different proteins was being used, an atom's x, y, and z coordinate can not be used. The `get_num_nn()` and `get_num_dewet_nn()` functions return a list that contains the number of nearest neighbors and dewetted nearest neighbors for every atom; these two features would give information regarding an atoms relative position. 
+
+Finding the number of nearest neighbors for each atom was straightforward. All atoms in each protein were clustered using the same aforementioned method. The clusters were then iterated through to determine the number of nearest neighbors of each atom (the size of the cluster an atom is in).
+
+```
+nn_list = []
+	for i in range(0, len(positions)):
+		for j in range(0, len(final_clusters)):
+			if i in final_clusters[j]:
+				nn_list.append(len(final_clusters[j]))
+				break
 ```
 
 
