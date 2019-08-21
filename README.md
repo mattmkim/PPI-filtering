@@ -72,7 +72,10 @@ Again, the performance of the filter was not very good. While this approach succ
 
 ## Machine Learning Approach
 
-The naive approach to the filtering problem had some success, but ultimately could not serve as a comprehensive solution - there were false positive atoms that were in contact with true positive atoms, which the aforementioned filter could not filter out. 
+The naive approach to the filtering problem had some success, but ultimately could not serve as a comprehensive solution - there were false positive atoms that were in contact with true positive atoms, which the aforementioned filter could not filter out. Data for five proteins were processed into a Pandas dataframe and was used to train and test a neural network created using the Pytorch framework. 
 
+### Features
+
+adsf
 
 
