@@ -95,12 +95,19 @@ Since data for five different proteins was being used, an atom's x, y, and z coo
 Finding the number of nearest neighbors for each atom was straightforward. All atoms in each protein were clustered using the same aforementioned method. The clusters were then iterated through to determine the number of nearest neighbors of each atom (the size of the cluster an atom is in).
 
 ```
+# list to contain the number of nearest neighbors for each atom 
 nn_list = []
-	for i in range(0, len(positions)):
-		for j in range(0, len(final_clusters)):
-			if i in final_clusters[j]:
-				nn_list.append(len(final_clusters[j]))
-				break
+# positions is a list of 3-tuples representing each atoms coordinates
+for i in range(0, len(positions)):
+	for j in range(0, len(final_clusters)):
+		# atoms in final_clusters are represented as integers, in the same order as they appear in positions
+		if i in final_clusters[j]:
+			nn_list.append(len(final_clusters[j]))
+			break
+			
+nn_list = nn_list * 51
+
+return nn_list
 ```
 
 
