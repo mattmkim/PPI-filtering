@@ -112,6 +112,63 @@ nn_list = nn_list * 51
 
 return nn_list
 ```
-Determining 
+Determining the number of dewetted nearest neighbors was slighlty more complicated. For each potential value, the positions of atoms that were dewetted were put into a `KDTree`. If no atoms were dewetted at a potential value, all atoms at that potential value had 0 dewetted nearest neighbors. Thus, a list of zeros was concatenated to a runnning list containing the number of dewetted nearest neighbors, `dewet_nn_list`.
+
+```
+# only concerned about potential values between 0 and 2.00, at 0.04 increments
+for i in range(0, 204, 4):
+	filename = protein_name + ('/beta_phi_%03d/pred_contact_mask.dat' % (i))
+	
+	# created numpy array containing 1, representing that the atom was dewetted, or 0, representing that the atom was
+	# not dewetted 
+	contact_pred = np.loadtxt(filename)
+	contact_pred_positions = positions[np.where(contact_pred == 1)[0].tolist()] 
+		if (len(contact_pred_positions) == 0):
+			list_zero = [0] * len(positions)
+			dewet_nn_list = dewet_nn_list + list_zero
+```
+If there were atoms that were dewetted at a potential value, the same procedure to find the number of nearest neighbors was used - all atoms were clustered. However, in order to only count atoms that had been dewetted at a potential value, atoms in clusters had to be represented by their position so that they could be compared to a list containing the positions of atoms that have dewetted at that potential value. 
+
+```
+# iterate through clusters made to create new 'final_clusters' containing atom positions
+final_clusters_positions = []
+for i in range(0, len(final_clusters)):
+	cluster_positions = []
+	for j in range(0, len(final_clusters[i])):
+		cluster = list(final_clusters[i])
+		cluster_positions.append(list(positions[cluster[j]]))
+	final_clusters_positions.append(cluster_positions)
+```
+Next, all atom positions were iterated through, and located in `final_clusters_positions`. Once its cluster was found, the atom positions in the cluster were iterated through and compared to the atom positions in `contact_pred_positions` to determine if it is dewetted.
+
+```
+for i in range(0, len(positions)):
+	position = list(positions[i])
+	for j in range(0, len(final_clusters_positions)):					
+		if position in final_clusters_positions[j]:
+			num_dewet = 0
+			for k in range(0, len(final_clusters_positions[j])):
+				if np.all(final_clusters_positions[j][k] in contact_pred_positions):
+					num_dewet += 1
+
+			dewet_nn_list.append(num_dewet)
+			break
+```
+This process was completed for each potential value between 0 and 2.00, at 0.04 increments. 
+
+### True or False Positive
+
+Columns in the dataframe were created to indicate if an atom was a part of the PPI and if an atom was predicted to be a part of the PPI at the potential value associated with it, named 'Interface' and 'Prediction' respectively. All atoms that had were not predicted to be a part of the interface (had a value of 0 in the 'Prediction') were dropped, and if an atom was both a part of the PPI and predicted to be a part of the PPI, it would have a value of 1 in a new column labeled 'True Positive'. The model would be attempting to classify the test data as either a true positive (1) or false positive (0). 
+
+```
+df_final = df_final.drop(df_final[df_final.Prediction == 0].index)
+df_final['True Positive'] = (df_final['Interface'] == 1) & (df_final['Prediction'] == 1)
+df_final = df_final.drop(columns=['Prediction', 'Interface'])
+```
+
+## Model 
+
+
+
 
 
