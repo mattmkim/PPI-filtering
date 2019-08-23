@@ -194,6 +194,47 @@ optimizer = optim.Adam(net.parameters(), lr=0.009371318654565915, weight_decay=4
 
 Elements of the model such as the activation function, learning rate, weight decay, optimization algorithm, and dropout rate were all optimized using the [HyperSearch](https://github.com/kevinzakka/hypersearch) API. 
 
+The training of the model is shown below. 
+```
+criterion = nn.CrossEntropyLoss()
+# train neural network
+net.train()
+batch_size = 10
+for epoch in range(30):
+	running_loss = 0.0
+	total_batches = 0
+	for i in range(np.shape(x_train)[0] / batch_size):
+		batch = batch_size * i 
+		x_batch = x_train[batch:batch + batch_size]
+		y_batch = y_train[batch:batch + batch_size]
+
+		x_batch = torch.from_numpy(x_batch).type(torch.FloatTensor)
+		y_batch = torch.from_numpy(y_batch).type(torch.long)
+		optimizer.zero_grad()
+		net_out = net(x_batch)
+		loss = criterion(net_out, y_batch)
+		loss.backward()
+		optimizer.step()
+
+		running_loss += loss.data
+		total_batches += 1
+	print('[%d, %5d] loss: %.3f' % (epoch + 1, i + 1, running_loss / total_batches))
+	running_loss = 0.0
+	total_batches = 0
+```
+
+The loss criterion used was cross entropy loss. The model was trained for 30 epochs, with 10 atoms being passed into the model at a time; the loss value was printed after every epoch.
+```
+[1,   633] loss: 0.719
+[2,   633] loss: 0.713
+[3,   633] loss: 0.708
+...
+
+[29,   633] loss: 0.599
+[30,   633] loss: 0.596
+```
+
+
 
 
 
