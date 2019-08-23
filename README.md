@@ -168,6 +168,32 @@ df_final = df_final.drop(columns=['Prediction', 'Interface'])
 
 ## Model 
 
+The model is shown below. 
+
+```
+class Net(nn.Module):
+	def __init__(self):
+		super(Net, self).__init__()
+	        self.fc1 = nn.Linear(62, 42) 
+	        self.fc2 = nn.Linear(42, 32)
+	        self.fc3 = nn.Linear(32, 16)
+	        self.fc4 = nn.Linear(16, 2)
+
+	
+	def forward(self, x):
+	    x = (F.selu(self.fc1(x)))
+	    x = (F.selu(self.fc2(x)))
+	    x = (F.selu(self.fc3(x)))
+	    x = self.fc4(x)
+	    return F.log_softmax(x, dim=0)
+
+
+net = Net()
+optimizer = optim.Adam(net.parameters(), lr=0.009371318654565915, weight_decay=4.977688880327612e-06)
+```
+
+Elements of the model such as the activation function, learning rate, weight decay, optimization algorithm, and dropout rate were all optimized using the [HyperSearch](https://github.com/kevinzakka/hypersearch) API. 
+
 
 
 
