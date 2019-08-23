@@ -294,12 +294,7 @@ Number of wrong true positives: 87
 Number of false positives: 694
 Number of wrong false positives: 567
 ```
-
-
-
-
-
-
+While the model had reasonable success in identifying true positives, it did a poor job of identifying false positives. One problem area is the limited information stored in the feature vector; while there was data regarding the number of nearest neighbors and number of dewetted nearest neighbors for an atom, the model did not know information _about_ those neighbors. A potential solution to this problem would be to use a convoluted neural network; much like an image, there are spatial dependencies in a protein, which a CNN would be able to take into consideration. 
 
 
 
