@@ -194,6 +194,8 @@ optimizer = optim.Adam(net.parameters(), lr=0.009371318654565915, weight_decay=4
 
 Elements of the model such as the activation function, learning rate, weight decay, optimization algorithm, and dropout rate were all optimized using the [HyperSearch](https://github.com/kevinzakka/hypersearch) API. 
 
+### Training
+
 The training of the model is shown below. 
 ```
 criterion = nn.CrossEntropyLoss()
@@ -229,10 +231,58 @@ The loss criterion used was cross entropy loss. The model was trained for 30 epo
 [2,   633] loss: 0.713
 [3,   633] loss: 0.708
 ...
-
 [29,   633] loss: 0.599
 [30,   633] loss: 0.596
 ```
+
+### Testing
+
+The testing of the model is shown below. 
+```
+# test neural network
+
+net.eval()
+correct = 0
+total = 0
+true_positive = 0
+false_positive = 0
+wrong_true_positive = 0
+wrong_false_positive = 0
+for i in range(0, np.shape(x_test)[0]):
+	x_batch, y_batch = x_test[i], y_test[i]
+	x_batch = torch.from_numpy(x_batch).type(torch.FloatTensor)
+	y_batch = torch.tensor([y_batch])
+	outputs = net(x_batch)
+	_, predicted = torch.max(outputs.data, 0)
+	total += y_batch.size(0)
+	if (predicted.item() == 1) & (y_batch.item() == 0):
+		print('WRONG FALSE POSITIVE')
+		false_positive += 1
+		wrong_false_positive += 1
+	elif (predicted.item() == 1) & (y_batch.item() == 1):
+		print('CORRECT')
+		true_positive += 1
+	elif (predicted.item() == 0) & (y_batch.item() == 0):
+		print('CORRECT')
+		false_positive += 1
+	else:
+		print('WRONG TRUE POSITIVE')
+		wrong_true_positive += 1
+		true_positive += 1
+
+	correct += (predicted == y_batch).item()
+
+
+print('Accuracy of the network: %d%%' % (100 * correct / total))
+
+print('Number of true positives: %d' % (true_positive))
+print('Number of wrong true positives: %d' % (wrong_true_positive))
+print('Number of false positives: %d' % (false_positive))
+print('Number of wrong false positives: %d' % (wrong_false_positive))
+```
+
+One atom from the testing dataset was passed into the model at a time, and the number of correct and incorrect classifications were tracked in `wrong_true_positive` and `wrong_false_positive`. The overall accuracy of the network was determined by the number of correct classifications and total number of classifications made, stored in `correct` and `total` respectively. In this line, `outputs = net(x_batch)`, 
+
 
 
 
