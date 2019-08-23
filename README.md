@@ -283,6 +283,18 @@ print('Number of wrong false positives: %d' % (wrong_false_positive))
 
 One atom from the testing dataset was passed into the model at a time, and the number of correct and incorrect classifications were tracked in `wrong_true_positive` and `wrong_false_positive`. The overall accuracy of the network was determined by the number of correct classifications and total number of classifications made, stored in `correct` and `total` respectively. The line `outputs = net(x_batch)` stores the weights for the two classes, true and false positive; `_, predicted = torch.max(outputs.data, 0)` determines the index of the highest weight and stores it in `predicted`. If the values stored in `predicted` and `y_batch`, which holds the actual classification of an atom, are the same, we can increment the number of corect values in `correct += (predicted == y_batch).item()`.
 
+## Results
+
+The results of training and testing this model are shown below. 
+
+```
+Accuracy of the network: 41%
+Number of true positives: 424
+Number of wrong true positives: 87
+Number of false positives: 694
+Number of wrong false positives: 567
+```
+
 
 
 
