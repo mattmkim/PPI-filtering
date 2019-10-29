@@ -281,17 +281,14 @@ class Net(nn.Module):
 	def __init__(self):
 		super(Net, self).__init__()
 	        self.fc1 = nn.Linear(62, 42) 
-	        self.fc2 = nn.Linear(42, 32)
-	        self.fc3 = nn.Linear(32, 16)
-	        #self.dropout = nn.Dropout(p=0.384644071093)
+	        self.fc2 = nn.Linear(42, 16)
 	        self.fc4 = nn.Linear(16, 2)
 
 	
 	def forward(self, x):
 	    x = (F.relu(self.fc1(x)))
 	    x = (F.relu(self.fc2(x)))
-	    x = (F.relu(self.fc3(x)))
-	    x = self.fc4(x)
+	    x = self.fc3(x)
 	    return F.log_softmax(x, dim=0)
 
 
